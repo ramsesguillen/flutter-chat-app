@@ -1,6 +1,7 @@
 ///[]
 import 'package:chat_app/helpers/mostrar_alerta.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_service.dart';
 import 'package:chat_app/widgets/boton_azul.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/widgets/labels.dart';
@@ -64,6 +65,8 @@ class __FormState extends State<_Form> {
 ///[]
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+
     return Container(
       margin: EdgeInsets.only( top: 40),
       padding: EdgeInsets.symmetric( horizontal: 50 ),
@@ -99,6 +102,7 @@ class __FormState extends State<_Form> {
               final resigroOk = await authService.register(nameCtrl.text.trim(), emailCtrl.text.trim(), passCtrl.text.trim());
 
               if ( resigroOk == true ) {
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'usuarios');
               } else {
                 mostrarAlerta(context, 'Registro incorrecto', resigroOk);
